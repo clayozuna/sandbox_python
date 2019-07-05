@@ -3,6 +3,7 @@
 # Only problem is figuring out how to draw from edge of screen to mouse
 
 import pyautogui 		# Library to control keyboard and mouse functions
+import tkinter			# Library/toolkit for updating laptop screen
 
 pyautogui.PAUSE = 2.5		# Gives 2.5 second pause before running the program again
 
