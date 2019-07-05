@@ -5,11 +5,17 @@
 import pyautogui 		# Library to control keyboard and mouse functions
 import tkinter			# Library/toolkit for updating laptop screen
 
+print("Press Ctrl-C to quit.")
+
 pyautogui.PAUSE = 2.5		# Gives 2.5 second pause before running the program again
 
 pyautogui.FAILSAFE = True 	# Failsafe termination after moving mouse to upper left corner of the screen
 
 while True:
+
+	except KeyboardInterrupt:
+		print("\nDone")
+		break
 	# Calculate x and y of the mouse
 	x_coordinate = pyautogui.position().x
 	y_coordinate = pyautogui.position().y
@@ -29,3 +35,9 @@ while True:
 	print(coordinate)		# Prints mouse coordinates to terminal
 
 	print(screensize)		# Print screen size to terminal
+
+	# The end= prevents default newline character from being added to end of printed line
+	print(positionStr, end=" ")
+
+	# The \b escapes the characters and with flush prints new text
+	print('\b' * len(positionStr), end=" ", flush=True)
