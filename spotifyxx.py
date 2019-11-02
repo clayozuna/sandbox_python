@@ -14,7 +14,6 @@ scope = 'user-read-private user-read-playback-state user-modify-playback-state'
 # User ID: 1232420630?si=oJ4jVWLnQiO1O9PdPCtADg
 
 #erase cache and prompt for user permissions
-
 try:
     token = util.prompt_for_user_token(username, scope)
 except (AttributeError, JSONDecodeError):
@@ -24,43 +23,72 @@ except (AttributeError, JSONDecodeError):
 # Create our spotifyObject with permissions
 spotifyObject = spotipy.Spotify(auth=token)
 
+#Python prompt
+neutral = Style.RESET_ALL
+pyprompt = Fore.RED + Style.BRIGHT + ">>>" + neutral
+
 # Get current device
 devices = spotifyObject.devices()
-print(json.dumps(devices, sort_keys=True, indent=4))
-deviceID = devices['devices'][0]['id']
+deviceList = devices['devices']
+json_data = json.dumps(devices, sort_keys=True, indent=4) # How can this be more efficient?
+item_dict = json.loads(json_data)
+totalDevices = len(item_dict['devices']) # Lists the total number of devices connected to spotify
+deviceDict = {}
+#print(json.dumps(devices, sort_keys=True, indent=4))
 
 # Current track information
 track = spotifyObject.current_user_playing_track()
 print()
-print(json.dumps(track, sort_keys=True, indent=4))
+#print(json.dumps(track, sort_keys=True, indent=4))
 artist = track['item']['artists'][0]['name']
 track = track['item']['name']
-
 if artist != " ":
     print("Currently playing " + track + " by " + artist)
+    print()
 
 # User information
 user = spotifyObject.current_user()
 displayName = user['display_name']
 followers = user['followers']['total']
-neutral = Style.RESET_ALL
+
+
 # Prints out json data in a form we can read
 # print(json.dumps(VARIABLE, sort_keys=True, indent=4))
 
+print("Here are your devices connnected to your spotify account:")
+while totalDevices > 0:
+    totalDevices -= 1
+    deviceID = deviceList[totalDevices]['id']
+    deviceName = deviceList[totalDevices]['name']
+    deviceDict[deviceName] = deviceID
+    print(totalDevices , " - ", deviceList[totalDevices]['name'])
+
+
+
 while True:
     print()
-    print(Fore.RED + Style.BRIGHT + ">>>" + neutral + " Welcome to Spotipy " + displayName + "!")
-    print(Fore.RED + Style.BRIGHT + ">>>" + neutral + " You have " + str(followers) + " followers.")
+    print(pyprompt + " Welcome to Spotipy " + displayName + "!")
+    print("You have " + str(followers) + " followers.")
     print()
+#    print("Which device would you like to play to?")
+#    deviceSelect = int(input("Your device: "))
+#
+#    print(deviceList[deviceSelect]['name'])
+#    if deviceSelect != "":
+#        print()
+#        print("Okay. We'll play to " + deviceList[deviceSelect]['name'])
+##    else:
+#        break
+
     print("0 - search for an artist")
     print("1 - exit")
     print()
-    choice = input("Your choice: ")
+    choice = input(pyprompt + " Your choice: ")
 
     # Search for the artist
     if choice == "0":
         print()
-        searchQuery = input("Ok, what's their name?: ")
+        searchQuery = input(pyprompt + " Ok, what's their name?: ")
         print()
 
         # Get search results
@@ -105,7 +133,7 @@ while True:
 
         #See album art for specific track and play
         while True:
-            songSelection = input("Enter a song number to see album art (x to exit): ")
+            songSelection = input(pyprompt + " Enter a song number to see album art (x to exit): ")
             if songSelection == "x":
                 break
             trackSelectionList = []
