@@ -92,7 +92,7 @@ while command != "shutdown" or episode_number != 'nvm':
 
     actions.move_to_element(player)
     print("Enter 'command' if you would like to see the list of commands\n")
-    automatic()
+    # automatic()
     command = input("What would you like to do?: ")
     print("")
 
